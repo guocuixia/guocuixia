@@ -1,0 +1,35 @@
+import oss2
+
+class OSSManager:
+    def __init__(self, access_key_id, access_key_secret, endpoint, bucket_name):
+        auth = oss2.Auth(access_key_id, access_key_secret)
+        self.bucket = oss2.Bucket(auth, endpoint, bucket_name)
+
+    def upload_file(self, local_file, remote_file):
+        self.bucket.put_object_from_file(remote_file, local_file)
+
+    def download_file(self, remote_file, local_file):
+        self.bucket.get_object_to_file(remote_file, local_file)
+
+    def delete_file(self, remote_file):
+        self.bucket.delete_object(remote_file)
+
+if __name__ == "__main__":
+    access_key_id = 'your_access_key_id'
+    access_key_secret = 'your_access_key_secret'
+    endpoint = 'http://oss-cn-hangzhou.aliyuncs.com'  # 根据你的OSS服务商修改
+    bucket_name = 'your_bucket_name'
+
+    oss_manager = OSSManager(access_key_id, access_key_secret, endpoint, bucket_name)
+
+    # 上传文件示例
+    local_file_path = 'local_file.txt'
+    remote_file_path = 'remote_file.txt'
+    oss_manager.upload_file(local_file_path, remote_file_path)
+
+    # 下载文件示例
+    local_download_path = 'downloaded_file.txt'
+    oss_manager.download_file(remote_file_path, local_download_path)
+
+    # 删除文件示例
+    oss_manager.delete_file(remote_file_path)
